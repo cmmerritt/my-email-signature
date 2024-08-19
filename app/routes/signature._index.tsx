@@ -1,24 +1,29 @@
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { getSignatures } from "../models/signature.server";
-
 export const loader = async () => {
-  return json({ signatures: await getSignatures() });
+  const quoteRes = await fetch(
+    `${process.env.API_NINJAS_QUOTES_BASE_PATH}/`,
+    {
+      headers: {
+        "X-Api-Key": `${process.env.API_NINJAS_KEY}`,
+      },
+    }
+  );
+
+  return json({
+    quoteRes: await quoteRes.json(),
+  });
 };
 
 export default function Signature() {
-  const { signatures } = useLoaderData<typeof loader>();
+  const { quoteRes } = useLoaderData<typeof loader>();
   return (
     <main>
-      <h1>Signature</h1>
-      <ul>
-        {signatures.map((signature) => (
-          <li key={signature.slug}>
-              {signature.title}
-          </li>
-        ))}
-      </ul>
+      <h1>Your New Email Signature</h1>
+      <div>
+        {quoteRes[0].quote}
+      </div>
     </main>
   );
 }
