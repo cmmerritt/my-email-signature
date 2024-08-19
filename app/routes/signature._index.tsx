@@ -20,10 +20,10 @@ export default function Signature() {
   return (
     <main>
       <h1>Your New Email Signature</h1>
-      <div>
+      <div style={{ fontFamily: "Papyrus", fontSize: "2em" }}>
         {quoteRes.quote}
       </div>
-      <div>
+      <div style={{ fontFamily: "cursive", fontSize: "1.5em" }}>
         ~{randomAuthor}
       </div>
     </main>
