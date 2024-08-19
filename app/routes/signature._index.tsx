@@ -17,6 +17,11 @@ export const loader = async () => {
 export default function Signature() {
   const { quoteRes, randomAuthor } = useLoaderData<typeof loader>();
 
+  let authorMatch = false;
+  if (quoteRes.author === randomAuthor) {
+    authorMatch = true;
+  }
+
   return (
     <main>
       <h1>Your New Email Signature</h1>
@@ -26,6 +31,12 @@ export default function Signature() {
       <div style={{ fontFamily: "cursive", fontSize: "1.5em" }}>
         ~{randomAuthor}
       </div>
+      { authorMatch && 
+        <div>
+          Whoa! This is the real author! (Allegedly.)
+        </div>
+      }
+
     </main>
   );
 }
