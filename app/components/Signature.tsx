@@ -4,17 +4,18 @@ import type { Signature as SignatureType } from "../models/signature.server";
 interface SignatureProps {
   quoteRes: SignatureType;
   randomAuthor: string;
+  font: string;
 }
 
-const Signature: React.FC<SignatureProps> = ({ quoteRes, randomAuthor }) => {
+const Signature: React.FC<SignatureProps> = ({ quoteRes, randomAuthor, font }) => {
   const authorMatch = quoteRes.author === randomAuthor;
 
   return (
     <>
-      <div style={{ fontFamily: "Papyrus", fontSize: "2em" }}>
+      <div style={{ fontFamily: font, fontSize: "2em" }}>
         {quoteRes.quote}
       </div>
-      <div style={{ fontFamily: "cursive", fontSize: "1.5em" }}>
+      <div style={{ fontFamily: font, fontSize: "1.5em" }}>
         ~{randomAuthor}
       </div>
       {authorMatch && (

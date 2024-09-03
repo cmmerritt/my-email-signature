@@ -24,8 +24,9 @@ export default function SignaturePage() {
   const fontArray = ["Papyrus", "Cursive", "Times New Roman"]
 
   const handleUserFontChange = (e: SelectChangeEvent<string>) => {
-    console.log('Selected Font:', e.target.value);
-    setUserFont(e.target.value);
+    const nextFont = e.target.value;
+    console.log('nextFont', nextFont);
+    setUserFont(nextFont);
   };
 
   console.log('Current Font:', userFont);
@@ -35,7 +36,7 @@ export default function SignaturePage() {
       <h1>Your New Email Signature</h1>
       <Picker type="font" typeArray={fontArray} value={userFont} onChange={handleUserFontChange} />
       <div style={{ fontFamily: "Cursive" }}>
-        <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} />;
+        <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} />;
       </div>
     </main>
   );
