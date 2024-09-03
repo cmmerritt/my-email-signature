@@ -10,6 +10,17 @@ interface PickerProps {
 
 const Picker: React.FC<PickerProps> = ({ type, typeArray, value, onChange }) => {
   //const sxType = type === "font" ? "fontFamily" : "color";
+  let mapping;
+  if(type === 'font') {
+    mapping = typeArray.map(item => (
+      <MenuItem key={item} value={item} sx={{ fontFamily: item }}>{item}</MenuItem>
+    ))
+  } else if(type === 'color') {
+    mapping = typeArray.map(item => (
+      <MenuItem key={item} value={item} sx={{ color: item }}>{item}</MenuItem>
+    ))
+  }
+  
   return (
     <FormControl>
       <InputLabel id={`${type}-dropdown-label`}>Choose a {type}</InputLabel>
@@ -24,9 +35,7 @@ const Picker: React.FC<PickerProps> = ({ type, typeArray, value, onChange }) => 
           height: 50,
         }}
       >
-        {typeArray.map(item => (
-          <MenuItem key={item} value={item} sx={{ fontFamily: item }}>{item}</MenuItem>
-        ))}
+        {mapping}
       </Select>
     </FormControl> 
   );
