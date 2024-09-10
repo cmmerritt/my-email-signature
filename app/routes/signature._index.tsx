@@ -4,21 +4,35 @@ import { useLoaderData } from "@remix-run/react";
 import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
 import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
+import { getMaxOffset, getGiphy } from "../models/giphy.server";
 import Signature from "../components/Signature"; 
 import Picker from "../components/Picker";
 import authors from "~/shared/authors";
+
 export const loader = async () => {
   const quoteRes: SignatureType = await getSignature();
+
+  let quoteCategory = quoteRes.category;
+
+  if(quoteCategory == undefined) {
+    quoteCategory = "fun";
+  }
+
+  const maxOffset = await getMaxOffset(quoteCategory);
+
+  const gifUrl = await getGiphy(quoteCategory, maxOffset);
+
   const randomAuthor = authors[Math.floor(Math.random()*authors.length)];
 
   return json({
     quoteRes,
-    randomAuthor
+    randomAuthor,
+    gifUrl,
   });
 };
 
 export default function SignaturePage() {
-  const { quoteRes, randomAuthor } = useLoaderData<typeof loader>();
+  const { quoteRes, randomAuthor, gifUrl } = useLoaderData<typeof loader>();
   const [userFont, setUserFont] = useState<string>("Papyrus");
   const [userColor, setUserColor] = useState<string>("Black");
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
@@ -74,6 +88,9 @@ export default function SignaturePage() {
         <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
         <br />
         <Button variant="outlined" onClick={handleReload}>Click to get a new quote</Button>
+        <div>
+          <img src={gifUrl} alt={`GIF generated from Giphy for quote in category ${quoteRes.category}`}></img>
+        </div>
       </main>
     </Container>
   );
