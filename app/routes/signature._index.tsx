@@ -27,13 +27,11 @@ export default function SignaturePage() {
 
   const handleUserFontChange = (e: SelectChangeEvent<string>) => {
     const nextFont = e.target.value;
-    console.log('nextFont', nextFont);
     setUserFont(nextFont);
   };
 
   const handleUserColorChange = (e: SelectChangeEvent<string>) => {
     const nextColor = e.target.value;
-    console.log('nextColor', nextColor);
     setUserColor(nextColor);
   };
 
