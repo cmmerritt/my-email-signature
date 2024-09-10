@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
 import { useEffect, useState } from "react";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigation } from "@remix-run/react";
 import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
 import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
@@ -37,6 +37,8 @@ export default function SignaturePage() {
   const [userColor, setUserColor] = useState<string>("Black");
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const savedFont = window.localStorage.getItem("userFont");
@@ -78,16 +80,26 @@ export default function SignaturePage() {
   return (
     <Container>
       <main>
+        {navigation.state !== "idle" ? <div>Loading...</div> : null}
+
         <h1>Your New Email Signature</h1>
+
         <Picker type="font" typeArray={fontArray} value={userFont} onChange={handleUserFontChange} />
+
         <Picker type="color" typeArray={colorArray} value={userColor} onChange={handleUserColorChange} />
+
         <div style={{ fontFamily: "Cursive" }}>
           <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
         </div>
+
         <Button variant="outlined" onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</Button> 
+
         <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
+
         <br />
+
         <Button variant="outlined" onClick={handleReload}>Click to get a new quote</Button>
+
         <div>
           <img src={gifUrl} alt={`GIF generated from Giphy for quote in category ${quoteRes.category}`}></img>
         </div>
