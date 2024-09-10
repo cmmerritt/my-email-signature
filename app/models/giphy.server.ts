@@ -1,11 +1,15 @@
 export async function getMaxOffset(quoteCategory: string): Promise<number> {
   try {
+    if (!process.env.API_GIPHY_BASE_PATH || !process.env.API_GIPHY_KEY) {
+      throw new Error("Missing API base path or API key.");
+    }
+
     const response = await fetch(
       `${process.env.API_GIPHY_BASE_PATH}?q=${quoteCategory}&api_key=${process.env.API_GIPHY_KEY}&limit=1&offset=0&rating=pg-13`
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch Giphy API: ${response.statusText}`);
+      throw new Error(`Error fetching Giphy: ${response.status} - ${response.statusText}`);
     }
     
     const data = await response.json();
@@ -26,6 +30,10 @@ export async function getMaxOffset(quoteCategory: string): Promise<number> {
 
 export async function getGiphy(quoteCategory: string, maxOffset: number): Promise<string> {
   try {
+    if (!process.env.API_GIPHY_BASE_PATH || !process.env.API_GIPHY_KEY) {
+      throw new Error("Missing API base path or API key.");
+    }
+
     const randomOffset = Math.floor(Math.random() * maxOffset);
 
     const response = await fetch(
@@ -33,7 +41,7 @@ export async function getGiphy(quoteCategory: string, maxOffset: number): Promis
     );
 
     if (!response.ok) {
-      throw new Error(`Error fetching Giphy: ${response.statusText}`);
+      throw new Error(`Error fetching Giphy: ${response.status} - ${response.statusText}`);
     }
 
     const { data } = await response.json();

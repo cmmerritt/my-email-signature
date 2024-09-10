@@ -10,7 +10,11 @@ import Picker from "../components/Picker";
 import authors from "~/shared/authors";
 
 export const loader = async () => {
-  const quoteRes: SignatureType = await getSignature();
+  const quoteRes: SignatureType = await getSignature() ?? {
+    author: "Unknown",
+    category: "General",
+    quote: "No quote available.",
+  };
 
   let quoteCategory = quoteRes.category;
 
