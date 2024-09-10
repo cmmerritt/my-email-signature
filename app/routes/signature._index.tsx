@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node";
 import { useState } from "react";
 import { useLoaderData } from "@remix-run/react";
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent, Container, Box } from "@mui/material";
 import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
 import Signature from "../components/Signature"; 
@@ -21,6 +21,7 @@ export default function SignaturePage() {
   const { quoteRes, randomAuthor } = useLoaderData<typeof loader>();
   const [userFont, setUserFont] = useState("Papyrus");
   const [userColor, setUserColor] = useState("Black");
+  const [showAuthor, setShowAuthor] = useState(false);
 
   const fontArray = ["Papyrus", "Cursive", "Times New Roman"];
   const colorArray = ["Black", "Blue", "Purple", "Orange", "Pink", "Red"];
@@ -38,13 +39,17 @@ export default function SignaturePage() {
   console.log('Current Font:', userFont);
 
   return (
-    <main>
-      <h1>Your New Email Signature</h1>
-      <Picker type="font" typeArray={fontArray} value={userFont} onChange={handleUserFontChange} />
-      <Picker type="color" typeArray={colorArray} value={userColor} onChange={handleUserColorChange} />
-      <div style={{ fontFamily: "Cursive" }}>
-        <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />;
-      </div>
-    </main>
+    <Container>
+      <main>
+        <h1>Your New Email Signature</h1>
+        <Picker type="font" typeArray={fontArray} value={userFont} onChange={handleUserFontChange} />
+        <Picker type="color" typeArray={colorArray} value={userColor} onChange={handleUserColorChange} />
+        <div style={{ fontFamily: "Cursive" }}>
+          <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
+        </div>
+        <button onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</button> 
+        <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
+      </main>
+    </Container>
   );
 }
