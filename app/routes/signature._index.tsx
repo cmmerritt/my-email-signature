@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData } from "@remix-run/react";
 import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
 import { getSignature } from "../models/signature.server";
@@ -19,10 +19,23 @@ export const loader = async () => {
 
 export default function SignaturePage() {
   const { quoteRes, randomAuthor } = useLoaderData<typeof loader>();
-  const [userFont, setUserFont] = useState("Papyrus");
-  const [userColor, setUserColor] = useState("Black");
-  const [showAuthor, setShowAuthor] = useState(false);
-  const [reload, setReload] = useState(false);
+  const [userFont, setUserFont] = useState<string>("Papyrus");
+  const [userColor, setUserColor] = useState<string>("Black");
+  const [showAuthor, setShowAuthor] = useState<boolean>(false);
+  const [reload, setReload] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedFont = window.localStorage.getItem("userFont");
+    const savedColor = window.localStorage.getItem("userColor");
+  
+    if (savedFont) {
+      setUserFont(savedFont);
+    }
+  
+    if (savedColor) {
+      setUserColor(savedColor);
+    }
+  }, []);
 
   const fontArray = ["Papyrus", "Cursive", "Times New Roman"];
   const colorArray = ["Black", "Blue", "Purple", "Orange", "Pink", "Red"];
@@ -30,11 +43,13 @@ export default function SignaturePage() {
   const handleUserFontChange = (e: SelectChangeEvent<string>) => {
     const nextFont = e.target.value;
     setUserFont(nextFont);
+    window.localStorage.setItem("userFont", nextFont);
   };
 
   const handleUserColorChange = (e: SelectChangeEvent<string>) => {
     const nextColor = e.target.value;
     setUserColor(nextColor);
+    window.localStorage.setItem("userColor", nextColor);
   };
 
   const handleReload = () => { 
