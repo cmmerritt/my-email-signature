@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node";
 import { useState } from "react";
 import { useLoaderData } from "@remix-run/react";
-import { SelectChangeEvent, Container, Box } from "@mui/material";
+import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
 import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
 import Signature from "../components/Signature"; 
@@ -47,7 +47,7 @@ export default function SignaturePage() {
         <div style={{ fontFamily: "Cursive" }}>
           <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
         </div>
-        <button onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</button> 
+        <Button onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</Button> 
         <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
       </main>
     </Container>
