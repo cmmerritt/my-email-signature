@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 import { useLoaderData, useNavigation } from "@remix-run/react";
 import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
 import { getSignature } from "../models/signature.server";
@@ -37,19 +37,26 @@ export default function SignaturePage() {
   const [userColor, setUserColor] = useState<string>("Black");
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    const savedFont = window.localStorage.getItem("userFont");
-    const savedColor = window.localStorage.getItem("userColor");
+    setIsClient(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedFont = window.localStorage.getItem("userFont");
+      const savedColor = window.localStorage.getItem("userColor");
   
-    if (savedFont) {
-      setUserFont(savedFont);
-    }
+      if (savedFont) {
+        setUserFont(savedFont);
+      }
   
-    if (savedColor) {
-      setUserColor(savedColor);
+      if (savedColor) {
+        setUserColor(savedColor);
+      }
     }
   }, []);
 
@@ -88,20 +95,30 @@ export default function SignaturePage() {
 
         <Picker type="color" typeArray={colorArray} value={userColor} onChange={handleUserColorChange} />
 
-        <div style={{ fontFamily: "Cursive" }}>
+        <div style={{ fontFamily: isClient ? userFont : "Papyrus", color: isClient ? userColor : "Black" }}>
           <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
         </div>
 
-        <Button variant="outlined" onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</Button> 
+        <Button variant="outlined" onClick={() => setShowAuthor(prev => !prev)}>
+          Click to reveal/hide the real author
+        </Button>
 
-        <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
+        <div style={{ fontFamily: isClient ? userFont : "Papyrus", color: isClient ? userColor : "Black" }}>
+          {showAuthor && <Box>{quoteRes.author}</Box>}
+        </div>
 
         <br />
 
-        <Button variant="outlined" onClick={handleReload}>Click to get a new quote</Button>
+        <Button variant="outlined" onClick={handleReload}>
+          Click to get a new quote
+        </Button>
 
         <div>
-          <img src={gifUrl} alt={`GIF generated from Giphy for quote in category ${quoteRes.category}`}></img>
+          {gifUrl ? (
+            <img src={gifUrl} alt={`GIF for category ${quoteRes.category}`} />
+          ) : (
+            <div>Loading GIF...</div>
+          )}
         </div>
       </main>
     </Container>

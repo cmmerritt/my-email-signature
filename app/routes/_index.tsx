@@ -4,7 +4,9 @@ import { Link } from "@remix-run/react";
 export const meta: MetaFunction = () => {
   return [
     { title: "Email Signature Generator" },
-    { name: "Email Signature Generator", content: "Welcome to your new email signature!" },
+    { name: "description", content: "Create your own custom email signature with a random quote and GIF." },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
   ];
 };
 
