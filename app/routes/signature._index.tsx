@@ -22,6 +22,7 @@ export default function SignaturePage() {
   const [userFont, setUserFont] = useState("Papyrus");
   const [userColor, setUserColor] = useState("Black");
   const [showAuthor, setShowAuthor] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const fontArray = ["Papyrus", "Cursive", "Times New Roman"];
   const colorArray = ["Black", "Blue", "Purple", "Orange", "Pink", "Red"];
@@ -36,7 +37,14 @@ export default function SignaturePage() {
     setUserColor(nextColor);
   };
 
-  console.log('Current Font:', userFont);
+  const handleReload = () => { 
+    setReload(true);
+  }
+
+  if (reload) {
+    window.location.reload();
+    return null; 
+  }
 
   return (
     <Container>
@@ -47,8 +55,10 @@ export default function SignaturePage() {
         <div style={{ fontFamily: "Cursive" }}>
           <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
         </div>
-        <Button onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</Button> 
+        <Button variant="outlined" onClick={() => setShowAuthor(prev => !prev)}>Click to reveal/hide the real author</Button> 
         <div style={{ fontFamily: userFont, color: userColor }}>{showAuthor && <Box>{quoteRes.author}</Box>}</div>
+        <br />
+        <Button variant="outlined" onClick={handleReload}>Click to get a new quote</Button>
       </main>
     </Container>
   );
