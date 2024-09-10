@@ -6,7 +6,7 @@ import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
 import Signature from "../components/Signature"; 
 import Picker from "../components/Picker";
-import authors from "shared/authors";
+import authors from "~/shared/authors";
 export const loader = async () => {
   const quoteRes: SignatureType = await getSignature();
   const randomAuthor = authors[Math.floor(Math.random()*authors.length)];
