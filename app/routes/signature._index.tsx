@@ -8,6 +8,7 @@ import { getMaxOffset, getGiphy } from "../models/giphy.server";
 import Signature from "../components/Signature"; 
 import Picker from "../components/Picker";
 import authors from "~/shared/authors";
+import { getQuoteKeywords } from "~/utils/quote";
 
 export const loader = async () => {
   const quoteRes: SignatureType = await getSignature() ?? {
@@ -87,6 +88,9 @@ export default function SignaturePage() {
     window.location.reload();
     return null; 
   }
+
+  const keywords = getQuoteKeywords(quoteRes.quote);
+  console.log(keywords);
 
   return (
     <Container>
