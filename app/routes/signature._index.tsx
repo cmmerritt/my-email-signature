@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json, LoaderFunction } from "@remix-run/node";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useLoaderData, useNavigation } from "@remix-run/react";
 import { SelectChangeEvent, Container, Box, Button } from "@mui/material";
@@ -8,41 +8,40 @@ import { getMaxOffset, getGiphy } from "../models/giphy.server";
 import Signature from "../components/Signature"; 
 import Picker from "../components/Picker";
 import authors from "~/shared/authors";
-import { getQuoteKeywords } from "~/utils/quote";
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
   const quoteRes: SignatureType = await getSignature() ?? {
     author: "Unknown",
     category: "General",
     quote: "No quote available.",
   };
 
-  let quoteCategory = quoteRes.category;
-
-  if(quoteCategory == undefined) {
-    quoteCategory = "fun";
-  }
-
-  const maxOffset = await getMaxOffset(quoteCategory);
-
-  const gifUrl = await getGiphy(quoteCategory, maxOffset);
+  const maxOffset = await getMaxOffset(quoteRes.category || "fun");
+  const gifUrl = await getGiphy(quoteRes.category || "fun", maxOffset);
 
   const randomAuthor = authors[Math.floor(Math.random()*authors.length)];
+
+  const API_GIPHY_BASE_PATH = process.env.API_GIPHY_BASE_PATH;
+  const API_GIPHY_KEY = process.env.API_GIPHY_KEY;
 
   return json({
     quoteRes,
     randomAuthor,
     gifUrl,
+    API_GIPHY_BASE_PATH,
+    API_GIPHY_KEY
   });
 };
 
 export default function SignaturePage() {
-  const { quoteRes, randomAuthor, gifUrl } = useLoaderData<typeof loader>();
+  const { quoteRes, randomAuthor, gifUrl, API_GIPHY_BASE_PATH, API_GIPHY_KEY } = useLoaderData<typeof loader>();
   const [userFont, setUserFont] = useState<string>("Papyrus");
   const [userColor, setUserColor] = useState<string>("Black");
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [myGifUrl, setMyGifUrl] = useState<string>(gifUrl);
+  const [category, setCategory]= useState<string>(quoteRes.category);
 
   const navigation = useNavigation();
 
@@ -89,8 +88,60 @@ export default function SignaturePage() {
     return null; 
   }
 
-  const keywords = getQuoteKeywords(quoteRes.quote);
-  console.log(keywords);
+  const getNewMaxOffset = async (quoteCategory: string): Promise<number> => {
+    try {
+      const response = await fetch(
+        `${API_GIPHY_BASE_PATH}?q=${quoteCategory}&api_key=${API_GIPHY_KEY}&limit=1&offset=0&rating=pg-13`
+      );
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Giphy: ${response.status} - ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+  
+      const totalCount = data?.pagination?.total_count;
+      if (totalCount === undefined) {
+        throw new Error("Invalid response structure: missing total_count");
+      }
+      
+      const maxOffset = Math.min(totalCount - 1, 4999);
+      return maxOffset;
+  
+    } catch (error) {
+      console.error("Failed to get max offset:", error);
+      throw error; 
+    }
+  }
+
+  const getNewGiphy = async (quoteCategory: string, maxOffset: number): Promise<string> => {
+    try {  
+      const randomOffset = Math.floor(Math.random() * maxOffset);
+  
+      const response = await fetch(
+        `${API_GIPHY_BASE_PATH}?q=${quoteCategory}&api_key=${API_GIPHY_KEY}&limit=1&offset=${randomOffset}&rating=pg-13`
+      );
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Giphy: ${response.status} - ${response.statusText}`);
+      }
+  
+      const { data } = await response.json();
+      return data[0]?.images?.original?.url || "No gif found";
+  
+    } catch (error) {
+      console.error("Failed to fetch Giphy:", error);
+      throw error;
+    }
+  }
+
+  const handleNewCategory = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const nextCategory = (event.target as HTMLButtonElement).value;
+    setCategory(nextCategory);
+    const offset = await getNewMaxOffset(nextCategory);
+    const nextUrl = await getNewGiphy(nextCategory, offset);
+    setMyGifUrl(nextUrl);
+  }
 
   return (
     <Container>
@@ -104,7 +155,7 @@ export default function SignaturePage() {
         <Picker type="color" typeArray={colorArray} value={userColor} onChange={handleUserColorChange} />
 
         <div style={{ fontFamily: isClient ? userFont : "Papyrus", color: isClient ? userColor : "Black" }}>
-          <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} />
+          <Signature quoteRes={quoteRes} randomAuthor={randomAuthor} font={userFont} color={userColor} onClick={handleNewCategory} />
         </div>
 
         <Button variant="outlined" onClick={() => setShowAuthor(prev => !prev)}>
@@ -122,8 +173,8 @@ export default function SignaturePage() {
         </Button>
 
         <div>
-          {gifUrl ? (
-            <img src={gifUrl} alt={`GIF for category ${quoteRes.category}`} />
+          {myGifUrl ? (
+            <img src={myGifUrl} alt={`GIF for category ${category}`} />
           ) : (
             <div>Loading GIF...</div>
           )}
