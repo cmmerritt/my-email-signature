@@ -8,30 +8,37 @@ interface SignatureProps {
   randomAuthor: string;
   font: string;
   color: string;
-  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const Signature: React.FC<SignatureProps> = ({ quoteRes, randomAuthor, font, color, onClick }) => {
+const Signature: React.FC<SignatureProps> = ({
+  quoteRes,
+  randomAuthor,
+  font,
+  color,
+  onClick,
+}) => {
   const authorMatch = quoteRes.author === randomAuthor;
 
   const quoteWords = quoteRes.quote.split(" ");
   const keywords = getQuoteKeywords(quoteRes.quote);
   const renderedQuote: JSX.Element[] = [];
+
   quoteWords.forEach((word, i) => {
-    if(keywords.includes(word)) {
+    if (keywords.includes(word)) {
       renderedQuote.push(
-      <Button
-      variant="outlined" 
-      key={i} 
-      style={{ fontWeight: 'bold' }} 
-      value={word} 
-      onClick={onClick}
-      >
-        {word}
-      </Button>
-    );
+        <Button
+          variant="outlined"
+          key={i}
+          style={{ fontWeight: "bold" }}
+          value={word} // Pass the word as the value
+          onClick={onClick}
+        >
+          {word}
+        </Button>
+      );
     } else {
-    renderedQuote.push(<span key={i}>{word} </span>);
+      renderedQuote.push(<span key={i}>{word} </span>);
     }
   });
 

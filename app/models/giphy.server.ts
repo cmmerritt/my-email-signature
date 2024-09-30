@@ -1,11 +1,11 @@
-export async function getMaxOffset(quoteCategory: string): Promise<number> {
+export async function getMaxOffset(category: string): Promise<number> {
   try {
     if (!process.env.API_GIPHY_BASE_PATH || !process.env.API_GIPHY_KEY) {
       throw new Error("Missing API base path or API key.");
     }
 
     const response = await fetch(
-      `${process.env.API_GIPHY_BASE_PATH}?q=${quoteCategory}&api_key=${process.env.API_GIPHY_KEY}&limit=1&offset=0&rating=pg-13`
+      `${process.env.API_GIPHY_BASE_PATH}?q=${category}&api_key=${process.env.API_GIPHY_KEY}&limit=1&offset=0&rating=pg-13`
     );
 
     if (!response.ok) {
@@ -15,8 +15,8 @@ export async function getMaxOffset(quoteCategory: string): Promise<number> {
     const data = await response.json();
 
     const totalCount = data?.pagination?.total_count;
-    if (totalCount === undefined) {
-      throw new Error("Invalid response structure: missing total_count");
+    if (!totalCount) {
+      throw new Error("Unable to fetch total count of GIFs.");
     }
     
     const maxOffset = Math.min(totalCount - 1, 4999);
