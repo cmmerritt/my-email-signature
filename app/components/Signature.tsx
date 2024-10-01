@@ -20,69 +20,55 @@ const Signature: React.FC<SignatureProps> = ({
   onClick,
 }) => {
 
-  try {
-    console.log("Rendering Signature Component");
-    console.log("quoteRes:", quoteRes);
-    
-    if (!quoteRes || !quoteRes.quote) {
-      throw new Error("Missing quoteRes or quote");
-    }
+  const authorMatch = quoteRes.author === randomAuthor;
 
-    const authorMatch = quoteRes.author === randomAuthor;
+  const quoteWords = quoteRes.quote.split(" ");
+  const keywords = getQuoteKeywords(quoteRes.quote);
+  const renderedQuote: JSX.Element[] = [];
 
-    const quoteWords = quoteRes.quote.split(" ");
-    const keywords = getQuoteKeywords(quoteRes.quote);
-    const renderedQuote: JSX.Element[] = [];
-  
-    const StyledButton = styled(Button)({
-      textTransform: 'none', 
-      fontFamily: font, 
-      fontSize: '1em',
-      color: color,
-      verticalAlign: 'baseline',
-      padding: 0,     
-      minWidth: 'auto', 
-      lineHeight: 'inherit',
-      height: 'auto',       
-    });
+  const StyledButton = styled(Button)({
+    textTransform: 'none', 
+    fontFamily: font, 
+    fontSize: '1em',
+    color: color,
+    verticalAlign: 'baseline',
+    padding: 0,     
+    minWidth: 'auto', 
+    lineHeight: 'inherit',
+    height: 'auto',       
+  });
 
-    quoteWords.forEach((word, i) => {
-      if (keywords.includes(word)) {
-        renderedQuote.push(
-            <StyledButton
-              key={i}
-              value={word} 
-              onClick={onClick}
-            >
-              {word}
-            </StyledButton>
-        );
-      } else {
-        renderedQuote.push(<span key={i}>{word} </span>);
-      }
-    });
-
-      return (
-        <>
-          <div style={{ display: 'flex', flexWrap: 'wrap', fontSize: "2em", alignItems: 'center', gap: '8px' }}>
-            {renderedQuote}
-          </div>
-          <div style={{ fontFamily: font, fontSize: "1.5em", color: color }}>
-            ~{randomAuthor}
-          </div>
-          {authorMatch && (
-            <div>
-              Whoa! This is the real author! (Allegedly.)
-            </div>
-          )}
-        </>
+  quoteWords.forEach((word, i) => {
+    if (keywords.includes(word)) {
+      renderedQuote.push(
+          <StyledButton
+            key={i}
+            value={word} 
+            onClick={onClick}
+          >
+            {word}
+          </StyledButton>
       );
+    } else {
+      renderedQuote.push(<span key={i}>{word} </span>);
+    }
+  });
 
-  } catch (error) {
-    console.error("Error rendering Signature component:", error);
-    return <div>Error rendering signature component.</div>;
-  }
-  
+  return (
+    <>
+      <div style={{ display: 'flex', flexWrap: 'wrap', fontSize: "2em", alignItems: 'center', gap: '8px' }}>
+        {renderedQuote}
+      </div>
+      <div style={{ fontFamily: font, fontSize: "1.5em", color: color }}>
+        ~{randomAuthor}
+      </div>
+      {authorMatch && (
+        <div>
+          Whoa! This is the real author! (Allegedly.)
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Signature;
