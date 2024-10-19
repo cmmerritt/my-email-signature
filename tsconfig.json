@@ -1,7 +1,7 @@
 {
   "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "netlify-edge-plugin.ts", "app/shared/authors.ts"],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022", "ES6"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -18,10 +18,6 @@
       "~/*": ["./app/*"]
     },
     // Vite takes care of building everything, not tsc.
-    "noEmit": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true
+    "noEmit": true
   }
 }
