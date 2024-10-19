@@ -1,6 +1,7 @@
 {
   "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "netlify-edge-plugin.ts", "app/shared/authors.ts"],
   "compilerOptions": {
+    "types": ["@remix-run/node", "vite/client"],
     "lib": ["DOM", "DOM.Iterable", "ES2022", "ES6"],
     "isolatedModules": true,
     "esModuleInterop": true,
