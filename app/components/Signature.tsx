@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import type { Signature as SignatureType } from "../models/signature.server";
 import { getQuoteKeywords } from "~/utils/quote";
 
@@ -24,29 +25,28 @@ const Signature: React.FC<SignatureProps> = ({
   const keywords = getQuoteKeywords(quoteRes.quote);
   const renderedQuote: JSX.Element[] = [];
 
-  const buttonStyles = {
-    textTransform: 'none',
-    fontFamily: font,
+  const StyledButton = styled(Button)({
+    textTransform: 'none', 
+    fontFamily: font, 
     fontSize: '1em',
     color: color,
     verticalAlign: 'baseline',
-    padding: 0,
-    minWidth: 'auto',
+    padding: 0,     
+    minWidth: 'auto', 
     lineHeight: 'inherit',
-    height: 'auto',
-  };
+    height: 'auto',       
+  }) as typeof Button;
 
   quoteWords.forEach((word, i) => {
     if (keywords.includes(word)) {
       renderedQuote.push(
-        <Button
+        <StyledButton
         key={i}
         value={word} 
         onClick={onClick}
-        sx={buttonStyles}
       >
         {word}
-      </Button>
+      </StyledButton>
       );
     } else {
       renderedQuote.push(<span key={i}>{word} </span>);
