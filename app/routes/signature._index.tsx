@@ -38,8 +38,8 @@ export const loader: LoaderFunction = async () => {
 
 export default function SignaturePage() {
   const { quoteRes, randomAuthor, gifUrl: initialGifUrl, API_GIPHY_BASE_PATH, API_GIPHY_KEY } = useLoaderData<typeof loader>();
-  const [userFont, setUserFont] = useState<string>("Papyrus");
-  const [userColor, setUserColor] = useState<string>("Black");
+  const [userFont, setUserFont] = useState<string>("");
+  const [userColor, setUserColor] = useState<string>("");
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [category, setCategory] = useState<string>(quoteRes.category);
@@ -58,10 +58,14 @@ export default function SignaturePage() {
 
       if (savedFont) {
         setUserFont(savedFont);
+      } else {
+        setUserFont("Papyrus");
       }
 
       if (savedColor) {
         setUserColor(savedColor);
+      } else {
+        setUserColor("Black");
       }
     }
   }, []);
@@ -90,6 +94,8 @@ export default function SignaturePage() {
     setCategory(nextCategory);
     fetchGif(nextCategory); 
   };
+
+  if(userFont === "" || userColor === "") return null;
 
   return (
     <Container>
