@@ -27,15 +27,25 @@ const Signature: React.FC<SignatureProps> = ({
   quoteWords.forEach((word, i) => {
     if (keywords.includes(word)) {
       renderedQuote.push(
-        <Button
-          variant="outlined"
-          key={i}
-          style={{ fontWeight: "bold" }}
-          value={word} // Pass the word as the value
-          onClick={onClick}
-        >
-          {word}
-        </Button>
+        <React.Fragment key={i}>
+          <span>
+            <Button
+            style={{ 
+            textTransform: "none",
+            fontFamily: font,
+            fontSize: "2rem",
+            color: color,
+            verticalAlign: "baseline",
+            padding: 0,          
+            margin: 0,         
+            minWidth: "auto",
+            }}
+            value={word} 
+            onClick={onClick}
+            >
+            {word}
+            </Button> </span>
+        </React.Fragment>
       );
     } else {
       renderedQuote.push(<span key={i}>{word} </span>);
@@ -44,12 +54,26 @@ const Signature: React.FC<SignatureProps> = ({
 
   return (
     <>
-      <div style={{ fontFamily: font, fontSize: "2em", color: color }}>
+      <div 
+      style={{ 
+        fontFamily: font, 
+        fontSize: "2rem", 
+        color: color,
+        display: "flex",    
+        flexDirection: "column",                      
+      }}>
+        <div 
+        style={{
+
+        }}>
         {renderedQuote}
-      </div>
-      <div style={{ fontFamily: font, fontSize: "1.5em", color: color }}>
+        </div>
+        
+      
+      <div style={{ fontSize: "1.5rem" }}>
         ~{randomAuthor}
       </div>
+    </div>
       {authorMatch && (
         <div>
           Whoa! This is the real author! (Allegedly.)
