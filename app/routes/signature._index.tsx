@@ -6,7 +6,6 @@ import { getSignature } from "../models/signature.server";
 import type { Signature as SignatureType } from "../models/signature.server";
 import { getMaxOffset, getGiphy } from "../models/giphy.server";
 import { useFetchGif } from "../hooks/useFetchGif";
-import Header from "~/components/Header";
 import Signature from "../components/Signature"; 
 import Gif from "../components/Gif";
 import Picker from "../components/Picker";
@@ -100,13 +99,10 @@ export default function SignaturePage() {
 
   return (
     <Container>
-      <Header />
-      <main
-        style={{
-          marginTop: "2rem"
-        }}
-      >
+      <main>
         {navigation.state !== "idle" ? <div>Loading...</div> : null}
+
+        <h1>Your New Email Signature</h1>
 
         <Picker
           type="font"
