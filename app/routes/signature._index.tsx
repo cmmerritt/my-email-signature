@@ -9,6 +9,7 @@ import { useFetchGif } from "../hooks/useFetchGif";
 import Signature from "../components/Signature"; 
 import Gif from "../components/Gif";
 import Picker from "../components/Picker";
+import Header from "../components/Header";
 import authors from "~/shared/authors";
 
 export const loader: LoaderFunction = async () => {
@@ -99,6 +100,7 @@ export default function SignaturePage() {
 
   return (
     <Container>
+      <Header />
       <main>
         {navigation.state !== "idle" ? <div>Loading...</div> : null}
 
