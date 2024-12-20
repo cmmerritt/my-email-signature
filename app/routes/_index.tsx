@@ -146,26 +146,25 @@ export default function SignaturePage() {
         </div>
 
         <Button
-  variant="contained"
-  style={{
-    backgroundColor: userColor.toLowerCase(),
-    color: userColor === "Black" ? "white" : "black",
-    fontFamily: userFont,
-    borderRadius: "12px",
-    padding: "10px 20px",
-    textTransform: "none",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-    transition: "transform 0.2s ease, background-color 0.2s ease",
-  }}
-  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-  onMouseOut={(e) =>
-    (e.currentTarget.style.backgroundColor = userColor.toLowerCase())
-  }
-  onClick={() => setShowAuthor((prev) => !prev)}
->
-  Click to reveal/hide the real author
-</Button>
-
+          variant="contained"
+          style={{
+            color: ["Black", "Blue", "Purple"].includes(userColor) ? "white" : "black",
+            backgroundColor: userColor.toLowerCase(),
+            borderRadius: "12px",
+            fontFamily: userFont,
+            padding: "10px 20px",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+            textTransform: "none",
+            transition: "transform 0.2s ease, background-color 0.2s ease",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = userColor.toLowerCase())
+          }
+          onClick={() => setShowAuthor((prev) => !prev)}
+        >
+          Click to reveal/hide the real author
+        </Button>
 
         <div
           style={{
@@ -178,7 +177,24 @@ export default function SignaturePage() {
 
         <br />
 
-        <Button variant="outlined" onClick={handleReload}>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: userColor.toLowerCase(),
+            color: ["Black", "Blue", "Purple"].includes(userColor) ? "white" : "black",
+            fontFamily: userFont,
+            borderRadius: "12px",
+            padding: "10px 20px",
+            textTransform: "none",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+            transition: "transform 0.2s ease, background-color 0.2s ease",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = userColor.toLowerCase())
+          }
+          onClick={handleReload}
+        >
           Click to get a new quote
         </Button>
 
