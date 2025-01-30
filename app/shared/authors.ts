@@ -24,6 +24,7 @@ const authors: string[] = [
   'Emily Dickinson',
   'Eminem',
   'Friedrich Nietzsche',
+  'Galileo',
   'Gandalf',
   'George Eliot',
   'George Washington',
@@ -72,6 +73,7 @@ const authors: string[] = [
   'Socrates',
   'Stephen King',
   'Steve Jobs',
+  'Sun Tzu',
   'Sylvia Plath',
   'Taylor Swift',
   'The Dalai Lama',
@@ -86,7 +88,7 @@ const authors: string[] = [
   'Walt Whitman',
   'Wayne Gretzky',
   'William Shakespeare',
-  'Winston Churchill'
+  'Winston Churchill',
   ];
 
   export default authors;
