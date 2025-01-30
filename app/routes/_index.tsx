@@ -97,10 +97,6 @@ export default function SignaturePage() {
     window.localStorage.setItem("userColor", nextColor);
   };
 
-  const handleReload = () => {
-    window.location.reload();
-  };
-
   const handleKeywordClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const nextCategory = (event.target as HTMLButtonElement).value;
     setCategory(nextCategory);
@@ -179,14 +175,6 @@ export default function SignaturePage() {
             userFont={userFont}
             onClick={copyToClipboard}
             label="Click to copy your HTML email signature"
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <CustomButton
-            userColor={userColor}
-            userFont={userFont}
-            onClick={handleReload}
-            label="Click to get a new quote"
             />
           </Grid>
         </Grid>
